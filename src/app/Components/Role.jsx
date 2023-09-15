@@ -30,7 +30,6 @@ const Role = (props) => {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(data);
                 setMap(data);
                 setSkillSet({
                     ...skillSet,
@@ -43,8 +42,8 @@ const Role = (props) => {
     };
 
     return (
-        <div className="w-10/12 mx-auto shadow px-8 pb-2 border rounded-md flex flex-col gap-y-2">
-            {role && <h1 className="text-2xl font-bold text-center my-2 border-b py-4">{role.title}</h1>}
+        <div className="w-10/12 mx-auto shadow px-8 pb-5 border rounded-md flex flex-col gap-y-2">
+            {role && <h1 className="text-2xl font-bold text-start my-2 border-b py-4">{role.title}</h1>}
             {skillSet ? (
                 Object.keys(skillSet).map((skillType) => (
                     <Skills key={skillType} skillType={skillType} skillSet={skillSet} updateSkill={updateSkill} />

@@ -5,23 +5,32 @@ import { skills } from "@/skills";
 import { useState } from "react";
 
 const Skills = ({ skillType, skillSet, updateSkill }) => {
-    const colorScheme = {
-        relevant: "green",
-        suggested: "blue",
-        optional: "yellow",
-    };
     const [showDropDown, setShowDropDown] = useState(false);
     const [filter, setFilter] = useState("");
     const filteredSkills = skills.filter((skill) => skill.name.toLowerCase().includes(filter.toLowerCase()));
 
     return (
         <div className="my-1 pl-5">
-            <h1 className={`text-lg font-bold capitalize text-${colorScheme[skillType]}-900`}>{skillType} Skills</h1>
+            <h1
+                className={
+                    `text-lg font-bold capitalize ` +
+                    (skillType === "relevant" ? "text-green-900" : "") +
+                    (skillType === "suggested" ? "text-blue-900" : "") +
+                    (skillType === "optional" ? "text-yellow-900" : "")
+                }
+            >
+                {skillType} Skills
+            </h1>
             <div className="flex flex-row gap-x-3 mt-2 flex-wrap justify-start items-center">
                 {skillSet[skillType].map((skillId) => (
                     <span
                         key={skillId}
-                        className={`flex flex-row items-center justify-start rounded-full px-3 py-1 text-sm font-semibold border mr-2 bg-${colorScheme[skillType]}-200/50 text-${colorScheme[skillType]}-900 border-${colorScheme[skillType]}-900`}
+                        className={
+                            `flex flex-row items-center justify-start rounded-full px-3 py-1 text-sm font-semibold border mr-2 ` +
+                            (skillType === "relevant" ? "text-green-900 border-green-900 bg-green-200/50" : "") +
+                            (skillType === "suggested" ? "text-blue-900 border-blue-900 bg-blue-200/50" : "") +
+                            (skillType === "optional" ? "text-yellow-900 border-yellow-900 bg-yellow-200/50" : "")
+                        }
                     >
                         {skills.find((skillSet) => skillSet.id == skillId).name}
                         <span
@@ -42,10 +51,10 @@ const Skills = ({ skillType, skillSet, updateSkill }) => {
                     }}
                     onBlur={() => setShowDropDown(false)}
                 >
-                    <div className="flex flex-row justify-between items-center border rounded pr-3">
+                    <div className={"flex flex-row justify-between items-center border-2 rounded pr-3 " + (skillType === "relevant" ? "border-green-900" : "") + (skillType === "suggested" ? "border-blue-900" : "") + (skillType === "optional" ? "border-yellow-900" : "")}>
                         <input
                             type="text"
-                            className="p-2 rounded-md focus:outline-none"
+                            className={"px-2 py-0.5 rounded-md focus:outline-none"}
                             placeholder="Add Skill..."
                             onChange={(e) => setFilter(e.target.value)}
                             value={filter}
@@ -61,7 +70,7 @@ const Skills = ({ skillType, skillSet, updateSkill }) => {
                             </span>
                         )}
                     </div>
-                    {filter && (
+                    {showDropDown && (
                         <ul className="absolute backdrop-blur-lg shadow-xl border  max-h-[400px] w-full overflow-scroll">
                             {filteredSkills.map((skill) => (
                                 <li

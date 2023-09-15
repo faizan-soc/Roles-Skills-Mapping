@@ -1,6 +1,8 @@
 import XMark from "@/Icons/XMark";
+import Reset from "@/Icons/Reset";
+
 import { skills } from "@/skills";
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 const Skills = ({ skillType, skillSet, updateSkill }) => {
     const colorScheme = {
@@ -40,13 +42,25 @@ const Skills = ({ skillType, skillSet, updateSkill }) => {
                     }}
                     onBlur={() => setShowDropDown(false)}
                 >
-                    <input
-                        type="text"
-                        className={"border py-1 px-4 w-full rounded-md"}
-                        placeholder="Add Skill..."
-                        onChange={(e) => setFilter(e.target.value)}
-                        value={filter}
-                    />
+                    <div className="flex flex-row justify-between items-center border rounded pr-3">
+                        <input
+                            type="text"
+                            className="p-2 rounded-md focus:outline-none"
+                            placeholder="Add Skill..."
+                            onChange={(e) => setFilter(e.target.value)}
+                            value={filter}
+                        />
+                        {filter && (
+                            <span
+                                className="cursor-pointer "
+                                onClick={() => {
+                                    setFilter("");
+                                }}
+                            >
+                                <Reset classes={"w-4 h-4 text-neutral-500"} />
+                            </span>
+                        )}
+                    </div>
                     {filter && (
                         <ul className="absolute backdrop-blur-lg shadow-xl border  max-h-[400px] w-full overflow-scroll">
                             {filteredSkills.map((skill) => (

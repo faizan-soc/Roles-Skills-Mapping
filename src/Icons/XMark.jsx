@@ -1,6 +1,6 @@
 import React from "react";
 
-const XMark = ({classes, props}) => {
+const XMark = ({classes}) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"

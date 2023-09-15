@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import XMark from "@/Icons/XMark";
 import { skills } from "@/skills";
 
-const Skills = ({ skillType, skillSet, removeSkill, addSkill } ) => {
+const Skills = ({ skillType, skillSet, removeSkill, addSkill }) => {
     const colorScheme = {
         relevant: "green",
         suggested: "blue",
@@ -30,7 +30,7 @@ const Skills = ({ skillType, skillSet, removeSkill, addSkill } ) => {
                     </span>
                 ))}
                 <select
-                        className={`flex flex-row items-center justify-start rounded-full px-3 py-1 text-sm font-semibold border mr-2 mb-2 w-max text-${colorScheme[skillType]}-900 border-${colorScheme[skillType]}-900`}
+                    className={`flex flex-row items-center justify-start rounded-full px-3 py-1 text-sm font-semibold border mr-2 mb-2 w-40 text-${colorScheme[skillType]}-900 border-${colorScheme[skillType]}-900 `}
                     onChange={(e) => {
                         addSkill(e.target.value, skillType);
                         e.target.value = "";

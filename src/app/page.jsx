@@ -23,14 +23,7 @@ const page = () => {
             });
     }, []);
 
-    const removeSkill = (skillId, skillType) => {
-        setSkillSet({
-            ...skillSet,
-            [skillType]: skillSet[skillType].filter((id) => id !== skillId),
-        });
-    };
-
-    const updateMapping = () => {
+    const updateSkill = (skillId, skillType, action) => {
         fetch("/api/roles-skills-mapping", {
             method: "PATCH",
             headers: {
@@ -38,20 +31,24 @@ const page = () => {
             },
             body: JSON.stringify({
                 role_id: role?.id,
-                skill_set: skillSet,
+                skill_set:
+                    action === "remove"
+                        ? { ...skillSet, [skillType]: skillSet[skillType].filter((id) => id !== skillId) }
+                        : { ...skillSet, [skillType]: [...skillSet[skillType], skillId] },
             }),
         })
             .then((res) => res.json())
             .then((data) => {
+                console.log(data);
                 setMap(data);
+                setSkillSet({
+                    ...skillSet,
+                    [skillType]:
+                        action === "remove"
+                            ? skillSet[skillType].filter((id) => id !== skillId)
+                            : [...skillSet[skillType], skillId],
+                });
             });
-    };
-
-    const addSkill = (skillId, skillType) => {
-        setSkillSet({
-            ...skillSet,
-            [skillType]: [...skillSet[skillType], skillId],
-        });
     };
 
     return (
@@ -85,27 +82,8 @@ const page = () => {
 
             {skillSet &&
                 Object.keys(skillSet).map((skillType) => (
-                    <Skills
-                        key={skillType}
-                        skillType={skillType}
-                        skillSet={skillSet}
-                        removeSkill={removeSkill}
-                        addSkill={addSkill}
-                    />
+                    <Skills key={skillType} skillType={skillType} skillSet={skillSet} updateSkill={updateSkill} />
                 ))}
-
-            <div className="flex flex-row items-center justify-end">
-                <button
-                    className={
-                        "px-4 py-2 border rounded-md bg-green-500 hover:bg-green-800 text-white font-semibold" +
-                        (skillSet === undefined ? " opacity-50 cursor-not-allowed" : " hover:cursor-pointer")
-                    }
-                    onClick={updateMapping}
-                    disabled={skillSet === undefined ? true : false}
-                >
-                    Save
-                </button>
-            </div>
         </div>
     );
 };

@@ -1,7 +1,7 @@
 import XMark from "@/Icons/XMark";
 import { skills } from "@/skills";
 
-const Skills = ({ skillType, skillSet, removeSkill, addSkill }) => {
+const Skills = ({ skillType, skillSet, updateSkill }) => {
     const colorScheme = {
         relevant: "green",
         suggested: "blue",
@@ -9,18 +9,18 @@ const Skills = ({ skillType, skillSet, removeSkill, addSkill }) => {
     };
 
     return (
-        <div className="my-5 pl-5">
+        <div className="my-1 pl-5">
             <h1 className={`text-xl font-bold capitalize text-${colorScheme[skillType]}-900`}>{skillType} Skills</h1>
-            <div className="flex flex-row gap-x-3 mt-3 flex-wrap justify-start">
+            <div className="flex flex-row gap-x-3 mt-2 flex-wrap justify-start">
                 {skillSet[skillType].map((skillId) => (
                     <span
                         key={skillId}
-                        className={`flex flex-row items-center justify-start rounded-full px-3 py-1 text-sm font-semibold border mr-2 mb-2 bg-${colorScheme[skillType]}-200 text-${colorScheme[skillType]}-900 border-${colorScheme[skillType]}-900`}
+                        className={`flex flex-row items-center justify-start rounded-full px-3 py-1 text-sm font-semibold border mr-2 mb-2 bg-${colorScheme[skillType]}-200/50 text-${colorScheme[skillType]}-900 border-${colorScheme[skillType]}-900`}
                     >
                         {skills.find((skillSet) => skillSet.id == skillId).name}
                         <span
                             onClick={() => {
-                                removeSkill(skillId, skillType);
+                                updateSkill(skillId, skillType, "remove");
                             }}
                         >
                             <XMark classes={"w-4 h-4 font-bold ml-2 cursor-pointer"} />
@@ -30,7 +30,7 @@ const Skills = ({ skillType, skillSet, removeSkill, addSkill }) => {
                 <select
                     className={`flex flex-row items-center justify-start rounded-full px-3 py-1 text-sm font-semibold border mr-2 mb-2 w-40 text-${colorScheme[skillType]}-900 border-${colorScheme[skillType]}-900 `}
                     onChange={(e) => {
-                        addSkill(e.target.value, skillType);
+                        updateSkill(e.target.value, skillType, "add");
                         e.target.value = "";
                     }}
                 >

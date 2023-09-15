@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { roles } from "@/roles";
-import { map } from "@/mapping";
 
 import Skills from "./Components/Skills";
 
 const page = () => {
     const [role, setRole] = useState();
+    const [map, setMap] = useState({});
     const [skillSet, setSkillSet] = useState(map[role?.id]);
     const [rolesToDisplay, setRolesToDisplay] = useState(roles);
 
@@ -15,11 +15,36 @@ const page = () => {
         setSkillSet(map[role?.id]);
     }, [role]);
 
+    useEffect(() => {
+        fetch("/api/roles-skills-mapping")
+            .then((res) => res.json())
+            .then((data) => {
+                setMap(data);
+            });
+    }, []);
+
     const removeSkill = (skillId, skillType) => {
         setSkillSet({
             ...skillSet,
             [skillType]: skillSet[skillType].filter((id) => id !== skillId),
         });
+    };
+
+    const updateMapping = () => {
+        fetch("/api/roles-skills-mapping", {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                role_id: role?.id,
+                skill_set: skillSet,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setMap(data);
+            });
     };
 
     const addSkill = (skillId, skillType) => {
@@ -44,7 +69,7 @@ const page = () => {
                     }
                 />
                 <select
-                    className="p-2 border rounded-md w-40"
+                    className="p-2 border rounded-md w-72"
                     onChange={(e) => setRole(roles.find((role) => role?.id === e.target.value))}
                 >
                     <option value="" selected disabled>
@@ -58,27 +83,27 @@ const page = () => {
                 </select>
             </div>
 
-            {skillSet && Object.keys(skillSet).map((skillType) => (
-                <Skills
-                    key={skillType}
-                    skillType={skillType}
-                    skillSet={skillSet}
-                    removeSkill={removeSkill}
-                    addSkill={addSkill}
-                />
-            ))}
+            {skillSet &&
+                Object.keys(skillSet).map((skillType) => (
+                    <Skills
+                        key={skillType}
+                        skillType={skillType}
+                        skillSet={skillSet}
+                        removeSkill={removeSkill}
+                        addSkill={addSkill}
+                    />
+                ))}
 
             <div className="flex flex-row items-center justify-end">
-                <button 
-                  className={"px-4 py-2 border rounded-md bg-green-500 hover:bg-green-800 text-white font-semibold" + (
-                      skillSet === undefined? " opacity-50 cursor-not-allowed": " hover:cursor-pointer"
-                  )}
-                  onClick={() => {
-                      console.log(skillSet);
-                  }}
-                  disabled={skillSet === undefined? true: false}
+                <button
+                    className={
+                        "px-4 py-2 border rounded-md bg-green-500 hover:bg-green-800 text-white font-semibold" +
+                        (skillSet === undefined ? " opacity-50 cursor-not-allowed" : " hover:cursor-pointer")
+                    }
+                    onClick={updateMapping}
+                    disabled={skillSet === undefined ? true : false}
                 >
-                  Save
+                    Save
                 </button>
             </div>
         </div>

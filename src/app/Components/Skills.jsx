@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from "react";
-
 import XMark from "@/Icons/XMark";
 import { skills } from "@/skills";
 

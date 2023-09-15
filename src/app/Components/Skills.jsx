@@ -10,7 +10,7 @@ const Skills = ({ skillType, skillSet, updateSkill }) => {
 
     return (
         <div className="my-1 pl-5">
-            <h1 className={`text-xl font-bold capitalize text-${colorScheme[skillType]}-900`}>{skillType} Skills</h1>
+            <h1 className={`text-lg font-bold capitalize text-${colorScheme[skillType]}-900`}>{skillType} Skills</h1>
             <div className="flex flex-row gap-x-3 mt-2 flex-wrap justify-start">
                 {skillSet[skillType].map((skillId) => (
                     <span

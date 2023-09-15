@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import XMark from "@/Icons/XMark";
 import { skills } from "@/skills";
 
-const Skills = ({ skillType, skillSet, removeSkill, addSkill }) => {
+const Skills = ({ skillType, skillSet, removeSkill, addSkill } ) => {
     const colorScheme = {
         relevant: "green",
         suggested: "blue",
@@ -43,7 +43,7 @@ const Skills = ({ skillType, skillSet, removeSkill, addSkill }) => {
                         <option
                             key={skill.id}
                             value={skill.id}
-                            disabled={skillSet[skillType].includes(parseInt(skill.id))}
+                            disabled={Object.values(skillSet).flat().includes(skill.id)}
                         >
                             {skill.name}
                         </option>

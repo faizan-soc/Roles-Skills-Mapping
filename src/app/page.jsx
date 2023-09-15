@@ -47,6 +47,7 @@ const page = () => {
 
             {Object.keys(skillSet).map((skillType) => (
                 <Skills
+                    key={skillType}
                     skillType={skillType}
                     skillSet={skillSet}
                     removeSkill={removeSkill}

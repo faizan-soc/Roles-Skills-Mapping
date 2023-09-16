@@ -4,7 +4,7 @@ import Reset from "@/Icons/Reset";
 import { skills } from "@/skills";
 import { useState } from "react";
 
-const Skills = ({ skillType, skillSet, updateSkill }) => {
+const Skills = ({ skillType, skillSet, updateSkill, transferSkill }) => {
     const [showDropDown, setShowDropDown] = useState(false);
     const [filter, setFilter] = useState("");
     const filteredSkills = skills.filter((skill) => skill.name.toLowerCase().includes(filter.toLowerCase()));
@@ -21,18 +21,38 @@ const Skills = ({ skillType, skillSet, updateSkill }) => {
             >
                 {skillType} Skills
             </h1>
-            <div className="flex flex-row gap-x-3 mt-2 flex-wrap justify-start items-center">
+            <div
+                className="flex flex-row gap-x-3 mt-2 flex-wrap justify-start items-center"
+                onDragOver={(e) => {
+                    e.preventDefault();
+                    e.currentTarget.classList.add("border-2", "border-dashed", "border-gray-500");
+                }}
+                onDragLeave={(e) => {
+                    e.preventDefault();
+                    e.currentTarget.classList.remove("border-2", "border-dashed", "border-gray-500");
+                }}
+                onDrop={async (e) => {
+                    e.preventDefault();
+                    const [skillId, sourceSkillType] = e.dataTransfer.getData("skill").split(",");
+                    transferSkill(skillId, sourceSkillType, skillType);
+                    e.currentTarget.classList.remove("border-2", "border-dashed", "border-gray-500");
+                }}
+            >
                 {skillSet[skillType].map((skillId) => (
                     <span
                         key={skillId}
                         className={
-                            `flex flex-row items-center justify-start rounded-full px-3 py-1 text-sm font-semibold border mr-2 ` +
+                            `flex flex-row items-center justify-start rounded-full px-3 py-1 text-sm font-semibold border mr-2 cursor-grab active:cursor-grabbing ` +
                             (skillType === "relevant" ? "text-green-900 border-green-900 bg-green-200/50" : "") +
                             (skillType === "suggested" ? "text-blue-900 border-blue-900 bg-blue-200/50" : "") +
                             (skillType === "optional" ? "text-yellow-900 border-yellow-900 bg-yellow-200/50" : "")
                         }
+                        draggable
+                        onDragStart={(e) => {
+                            e.dataTransfer.setData("skill", [skillId, skillType]);
+                        }}
                     >
-                        {skills.find((skillSet) => skillSet.id == skillId).name}
+                        {skills.find((skillSet) => skillSet.id == skillId)?.name}
                         <span
                             onClick={() => {
                                 updateSkill(skillId, skillType, "remove");
@@ -51,7 +71,14 @@ const Skills = ({ skillType, skillSet, updateSkill }) => {
                     }}
                     onBlur={() => setShowDropDown(false)}
                 >
-                    <div className={"flex flex-row justify-between items-center border-2 rounded pr-3 " + (skillType === "relevant" ? "border-green-900" : "") + (skillType === "suggested" ? "border-blue-900" : "") + (skillType === "optional" ? "border-yellow-900" : "")}>
+                    <div
+                        className={
+                            "flex flex-row justify-between items-center border-2 rounded pr-3 " +
+                            (skillType === "relevant" ? "border-green-900" : "") +
+                            (skillType === "suggested" ? "border-blue-900" : "") +
+                            (skillType === "optional" ? "border-yellow-900" : "")
+                        }
+                    >
                         <input
                             type="text"
                             className={"px-2 py-0.5 rounded-md focus:outline-none"}

@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import roles  from "@/roles.json";
-import { title } from "process";
 const fs = require("fs").promises;
 
 export async function GET() {

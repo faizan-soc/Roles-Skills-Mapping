@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { roles } from "@/roles";
+// import { roles } from "@/roles";
 
 import Role from "./Components/Role";
 import Reset from "@/Icons/Reset";
 
 const page = () => {
     const [map, setMap] = useState({});
+    const [roles, setRoles] = useState([]);
     const [filter, setFilter] = useState("");
 
     useEffect(() => {
@@ -16,6 +17,13 @@ const page = () => {
             .then((data) => {
                 setMap(data);
             });
+        
+        fetch("/api/roles")
+            .then((res) => res.json())
+            .then((data) => {
+                setRoles(data);
+            }
+        );
     }, []);
 
     return (

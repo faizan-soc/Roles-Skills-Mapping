@@ -1,9 +1,18 @@
 import XMark from "@/Icons/XMark";
-
-import { skills } from "@/skills";
 import AddSkill from "./AddSkill";
 
+import { useEffect, useState } from "react";
+
 const Skills = ({ skillType, skillSet, updateSkill, transferSkill }) => {
+    const [skills, setSkills] = useState([]);
+
+    useEffect(() => {
+        fetch("/api/skills")
+            .then((res) => res.json())  
+            .then((data) => {
+                setSkills(data);
+            });
+    }, []);
 
     return (
         <div className="my-1 pl-5">

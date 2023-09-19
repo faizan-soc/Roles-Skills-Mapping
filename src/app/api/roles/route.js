@@ -3,13 +3,11 @@ import roles  from "@/roles.json";
 const fs = require("fs").promises;
 
 export async function GET() {
-    console.log("roles", roles);
     return NextResponse.json(roles);
 }
 
 export async function POST(request) {
     const role = await request.json();
-    console.log("role", role, 'title', role.title);
     const newRoles = [...roles, 
         { id: (roles.length + 1).toString(), title: role?.title }];
     try {
